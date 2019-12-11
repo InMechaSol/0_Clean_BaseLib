@@ -1,0 +1,342 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>0_Clean_BaseLib</name>
+    </assembly>
+    <members>
+        <member name="T:Clean_BaseLib.BaseClass_CommandResponse">
+            <summary>
+            BaseClass_CommandResponse abstract class is a common shared element used by Modules and the Execution System to Transact Packets.
+            </summary>
+            <remarks>
+            Within the clean architecture, this element crosses boundaries and is know by all layers.
+            </remarks>
+        </member>
+        <member name="M:Clean_BaseLib.BaseClass_CommandResponse.#ctor(Clean_BaseLib.BaseClass_Packet,Clean_BaseLib.BaseClass_Packet)">
+            <summary>
+            Constructor from Packets
+            </summary>
+            <param name="cmdPack">Command Packet</param>
+            <param name="rspPack">Response Packet</param>
+        </member>
+        <member name="P:Clean_BaseLib.BaseClass_CommandResponse.CommandPacket">
+            <summary>
+            Property exposing the command packet of this command response object
+            </summary>
+        </member>
+        <member name="P:Clean_BaseLib.BaseClass_CommandResponse.ResponsePacket">
+            <summary>
+            Property exposing the response packet of this command response object
+            </summary>
+        </member>
+        <member name="P:Clean_BaseLib.BaseClass_CommandResponse.CMDisPacked">
+            <summary>
+            Property indicating if the command packet has been packet, if its ready to be sent
+            </summary>
+        </member>
+        <member name="P:Clean_BaseLib.BaseClass_CommandResponse.CMDisSent">
+            <summary>
+            Property indicating if the command packet has been sent
+            </summary>
+        </member>
+        <member name="P:Clean_BaseLib.BaseClass_CommandResponse.RSPisReceived">
+            <summary>
+            Property indicating if the response packet has been recieved, if its ready to parse
+            </summary>
+        </member>
+        <member name="P:Clean_BaseLib.BaseClass_CommandResponse.RSPisParsed">
+            <summary>
+            Property indicating if the response packet has been parsed into serial values, if it has been deserialized
+            </summary>
+        </member>
+        <member name="F:Clean_BaseLib.BaseClass_CommandResponse.cmdPacket">
+            <summary>
+            Internal protected packet objects, command and response, inheriting classes can access these. 
+            Inheriting classes can override the public properties exposing these objects.
+            </summary>
+        </member>
+        <member name="F:Clean_BaseLib.BaseClass_CommandResponse.rspPacket">
+            <summary>
+            Internal protected packet objects, command and response, inheriting classes can access these. 
+            Inheriting classes can override the public properties exposing these objects.
+            </summary>
+        </member>
+        <member name="T:Clean_BaseLib.BaseClass_Packet">
+            <summary>
+            BaseClass_Packet is the abstract packet class implementing the ISerialValueCollection interface.
+            </summary>
+            <remarks>
+            Packets are known throughout the computing eco system and pass through the clean boundaries of dependency via serialization.
+            </remarks>
+        </member>
+        <member name="M:Clean_BaseLib.BaseClass_Packet.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            for use in serialization...
+            </summary>
+            <param name="info"></param>
+            <param name="context"></param>
+        </member>
+        <member name="P:Clean_BaseLib.BaseClass_Packet.Header">
+            <summary>
+            Property exposing the packet header
+            </summary>
+        </member>
+        <member name="P:Clean_BaseLib.BaseClass_Packet.Payload">
+            <summary>
+            Property exposing the packet header
+            </summary>
+        </member>
+        <member name="P:Clean_BaseLib.BaseClass_Packet.SerialValueList">
+            <summary>
+            The interface property for exposing the list of serial values
+            </summary>
+        </member>
+        <member name="F:Clean_BaseLib.BaseClass_Packet.packetHeader">
+            <summary>
+            Protected packet header exposed by public property.
+            </summary>
+        </member>
+        <member name="F:Clean_BaseLib.BaseClass_Packet.packetPayload">
+            <summary>
+            Protected packet payload exposed by public property.
+            </summary>
+        </member>
+        <member name="T:Clean_BaseLib.BaseClass_PacketHeader">
+            <summary>
+            BaseClass_PacketHeader is the abstract header class used for routing and identification of the packet payload
+            </summary>
+        </member>
+        <member name="M:Clean_BaseLib.BaseClass_PacketHeader.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            for use in serialization...
+            </summary>
+            <param name="info"></param>
+            <param name="context"></param>
+        </member>
+        <member name="P:Clean_BaseLib.BaseClass_PacketHeader.SerialValueList">
+            <summary>
+            The interface property for exposing the list of serial values
+            </summary>
+        </member>
+        <member name="T:Clean_BaseLib.BaseClass_PacketPayload">
+            <summary>
+            BaseClass_PacketPayload is the abstract payload class used to transfer serialized values through the clean system
+            </summary>
+        </member>
+        <member name="M:Clean_BaseLib.BaseClass_PacketPayload.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            for use in serialization...
+            </summary>
+            <param name="info"></param>
+            <param name="context"></param>
+        </member>
+        <member name="P:Clean_BaseLib.BaseClass_PacketPayload.SerialValueList">
+            <summary>
+            The interface property for exposing the list of serial values
+            </summary>
+        </member>
+        <member name="T:Clean_BaseLib.ISerialValueCollection">
+            <summary>
+            The interface for packets, headers, and payloads
+            </summary>
+        </member>
+        <member name="P:Clean_BaseLib.ISerialValueCollection.SerialValueList">
+            <summary>
+            The interface property for exposing the list of serial values
+            </summary>
+        </member>
+        <member name="T:Clean_BaseLib.BaseClass_Module">
+            <summary>
+            BaseClass_Module abstract class is the fundamental executional element of the modular clean system.  
+            </summary>
+            <remarks>
+            Modules know of, and therefore depend on, the module execuiton system on which they execute.  Modules
+            inheriting from this class have entry point functions called by the execution system according to its 
+            rules.
+            </remarks>
+        </member>
+        <member name="M:Clean_BaseLib.BaseClass_Module.#ctor">
+            <summary>
+            Constructor from nothing
+            </summary>
+        </member>
+        <member name="M:Clean_BaseLib.BaseClass_Module.#ctor(Clean_BaseLib.BaseClass_ModuleExecutionSystem)">
+            <summary>
+            Constructor from nothing, linking execution system
+            </summary>
+            <param name="modExeSys">Execution System to which this module belongs and from which it executes</param>
+        </member>
+        <member name="P:Clean_BaseLib.BaseClass_Module.IsInitialized">
+            <summary>
+            Indication of initialization status
+            </summary>
+        </member>
+        <member name="P:Clean_BaseLib.BaseClass_Module.ShouldExecute">
+            <summary>
+            Set and Get if the module threads should execute
+            </summary>
+        </member>
+        <member name="P:Clean_BaseLib.BaseClass_Module.InitThreadID">
+            <summary>
+            ID of thread executing initialization entry point function
+            </summary>
+        </member>
+        <member name="M:Clean_BaseLib.BaseClass_Module.mainInit">
+            <summary>
+            Entry Point Function - Main Initialiazation routine called in the initialization loop of the execution system.
+            </summary>
+        </member>
+        <member name="M:Clean_BaseLib.BaseClass_Module.mainLoop">
+            <summary>
+            Entry Point Function - Main Cyclic routine called in the main loop of the execution system.
+            </summary>
+        </member>
+        <member name="M:Clean_BaseLib.BaseClass_Module.linkModuleExeSys(Clean_BaseLib.BaseClass_ModuleExecutionSystem)">
+            <summary>
+            Function to link input execution system to this module object
+            </summary>
+            <param name="modExeSys"></param>
+        </member>
+        <member name="T:Clean_BaseLib.BaseClass_ModuleExecutionSystem">
+            <summary>
+            Abstract class defining core modular and clean concepts
+            </summary>
+            <remarks>
+            The module execution system is responsible for executing module entry points according to data and execution policies.
+            Data and execution policies provide the fundamental gaurantees for executional timing and data communication.
+            # Requirements
+            - Reusable, Common, Core IP
+            - Cleanly Architected
+            - Asynchrounous Event Driven Tasks Execution System
+            - Cyclic Non-Blocking Main Loop
+            - Robust Exception Handling
+            - Data and Execution Gaurantees
+            ## Clean Base Execution System
+            Usage: 
+            <code>
+            BaseClass_Module_Execution_System myExeSys = new BaseClass_Module_Execution_System();
+            myExeSys.Execute();
+            </code>
+            ### Configuration
+            Core configuration is possible through constants of the module execution system.
+            - Exception threshholds
+            - Other...
+            </remarks>
+        </member>
+        <member name="F:Clean_BaseLib.BaseClass_ModuleExecutionSystem.configured_failcount">
+            <summary>
+            Threshhold value of packet dequeue failures consider an exception
+            </summary>
+        </member>
+        <member name="F:Clean_BaseLib.BaseClass_ModuleExecutionSystem.configured_ms_mainWD">
+            <summary>
+            Time threshhold from start to next start of main loop
+            </summary>
+        </member>
+        <member name="F:Clean_BaseLib.BaseClass_ModuleExecutionSystem.configured_ms_exeLoopSleep">
+            <summary>
+            Time (ms) to sleep after each cyclic non-blocking loop of the execute function
+            </summary>
+        </member>
+        <member name="M:Clean_BaseLib.BaseClass_ModuleExecutionSystem.#ctor">
+            <summary>
+            Constructor from nothing
+            </summary>
+        </member>
+        <member name="P:Clean_BaseLib.BaseClass_ModuleExecutionSystem.Threads">
+            <summary>
+            Property exposing thread list
+            </summary>
+        </member>
+        <member name="P:Clean_BaseLib.BaseClass_ModuleExecutionSystem.CoreModules">
+            <summary>
+            Property exposing module list
+            </summary>
+        </member>
+        <member name="M:Clean_BaseLib.BaseClass_ModuleExecutionSystem.Execute">
+            <summary>
+            Main entry point of the execution system, of the application
+            </summary>
+            <remarks>
+            This single function forms the entire application.
+            Usage: 
+            <code>
+            // Create new Execution System Object from program main()
+            BaseClass_Module_Execution_System myExeSys = new BaseClass_Module_Execution_System();
+            // Call the Execute() function to immediately execute the full default application
+            myExeSys.Execute();
+            </code>
+            This functions is called as the main application, it only returns when the application closes.
+            Each iteration of the while loop is monitored and an exception is thrown if the data and execution
+            policy has been violated
+            </remarks>
+        </member>
+        <member name="M:Clean_BaseLib.BaseClass_ModuleExecutionSystem.linkModuleObj(Clean_BaseLib.BaseClass_Module)">
+            <summary>
+            helper function to link module, add it to the list of exe modules
+            </summary>
+            <param name="module">Module to link</param>
+        </member>
+        <member name="M:Clean_BaseLib.BaseClass_ModuleExecutionSystem.HandleExceptions">
+            <summary>
+            Execute Case Function to handle exceptions
+            </summary>
+        </member>
+        <member name="M:Clean_BaseLib.BaseClass_ModuleExecutionSystem.Initialize">
+            <summary>
+            Execute Case Function to handle (re)initialization the execution system
+            </summary>
+        </member>
+        <member name="M:Clean_BaseLib.BaseClass_ModuleExecutionSystem.ApplicationClose">
+            <summary>
+            Execute Case Function to shutdown and close the application
+            </summary>
+        </member>
+        <member name="M:Clean_BaseLib.BaseClass_ModuleExecutionSystem.ApplicationExceptionHandler(System.Exception,Clean_BaseLib.BaseClass_ModuleExecutionSystem)">
+            <summary>
+            Static Function, Exception Handler
+            </summary>
+            <param name="e"></param>
+            <param name="executionSystem"></param>
+        </member>
+        <member name="M:Clean_BaseLib.BaseClass_ModuleExecutionSystem.ManageThreads">
+             <summary>
+             Execute Case Function to manage child threads
+             This function is cyclic and non-blocking.  Data and Execution gauarantees...
+             </summary>
+             <remarks>
+             - Foreground threads require terminate logic, they must terminate before the application can close
+             - Background threads do not require terminate logic, though cancalation is ideal
+             - Barriers provide an interesting synchronization pattern
+             - Exceptions handled at the thread level
+             
+             # Each Module has at least two foreground threads
+             - 1 Initiaiization
+             - 2 Cyclic Non Blocking Loop
+            
+             Foreground threads have small execution space and route packets within Data and execution policy limits
+             Foreground threads launch asynchrounous background threads to execute packet tasks</remarks>
+        </member>
+        <member name="M:Clean_BaseLib.BaseClass_ModuleExecutionSystem.RoutePackets">
+            <summary>
+            Execute Case Function to route packets.
+            This function is cyclic and non-blocking.  Data and Execution gauarantees...
+            </summary>
+        </member>
+        <member name="T:Clean_BaseLib.BaseClass_SerialValue">
+            <summary>
+            BaseClass_SerialValue is the abstract class for values moved in packets
+            </summary>
+            <remarks>
+            This class can contain data of arbitrary type but it must be serializable
+            </remarks>
+        </member>
+        <member name="M:Clean_BaseLib.BaseClass_SerialValue.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            for serialization...
+            </summary>
+            <param name="info"></param>
+            <param name="context"></param>
+        </member>
+    </members>
+</doc>
