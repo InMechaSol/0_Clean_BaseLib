@@ -245,7 +245,7 @@ namespace Clean_BaseLib
                             // Start the thread
                             corethreads[exeModule.InitThreadID].Start();
                         }
-                        else if (!corethreads[exeModule.InitThreadID].ThreadState == System.Threading.ThreadState.Running)
+                        else if (corethreads[exeModule.InitThreadID].ThreadState != System.Threading.ThreadState.Running)
                         {
                             exeModule.ShouldExecute = false;
                             throw new Exception("Execution System - Module Init Thread not running: " + exeModule.ToString());
@@ -274,7 +274,7 @@ namespace Clean_BaseLib
                 do  // Pop Packet(s) and Push them to Module Queue(s)
                 {
                     BaseClass_Packet deQuePacket;
-                    if(PacketQueue.TryDequeue(out deQuePacket))
+                    if(packetQueue.TryDequeue(out deQuePacket))
                     {
                         failcount = 0;
                         // Now Push deQuePacket to correct module queue
@@ -285,7 +285,7 @@ namespace Clean_BaseLib
                         if (failcount > configured_failcount)
                             throw new Exception("Execution System failed to deQueue Packets, exceeded configured limit of consecutive deQueue failures.");
                     }
-                } while (!PacketQueue.IsEmpty);
+                } while (!packetQueue.IsEmpty);
             }           
         }
         #endregion

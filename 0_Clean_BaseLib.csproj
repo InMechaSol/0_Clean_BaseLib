@@ -6,12 +6,12 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>C:\InMechaSol\MDS_Server\MDS_Application\0_CleanBaseLib\0_Clean_BaseLib.xml</DocumentationFile>
+    <DocumentationFile>C:\InMechaSol\MDS_Server\MDS_Application\0_Clean_BaseLib\0_Clean_BaseLib.xml</DocumentationFile>
     <Optimize>false</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>C:\InMechaSol\MDS_Server\MDS_Application\0_CleanBaseLib\0_Clean_BaseLib.xml</DocumentationFile>
+    <DocumentationFile>C:\InMechaSol\MDS_Server\MDS_Application\0_Clean_BaseLib\0_Clean_BaseLib.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <Optimize>false</Optimize>
   </PropertyGroup>

@@ -35,6 +35,21 @@ namespace Clean_BaseLib
         }
         #endregion
 
+        #region Module Properties
+        /// <summary>
+        /// Indication of initialization status
+        /// </summary>
+        public bool IsInitialized { get; }
+        /// <summary>
+        /// Set and Get if the module threads should execute
+        /// </summary>
+        public bool ShouldExecute { set; get; }
+        /// <summary>
+        /// ID of thread executing initialization entry point function
+        /// </summary>
+        public int InitThreadID { get; }
+        #endregion
+
         #region Module Entry Point Functions
         /// <summary>
         /// Entry Point Function - Main Initialiazation routine called in the initialization loop of the execution system.
