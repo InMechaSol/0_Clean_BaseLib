@@ -182,10 +182,9 @@ namespace Clean_BaseLib
         /// Static Function, Exception Handler
         /// </summary>
         /// <param name="e"></param>
-        /// <param name="executionSystem"></param>
-        public static void ApplicationExceptionHandler(Exception e, BaseClass_ModuleExecutionSystem executionSystem)
+        public static void ApplicationExceptionHandler(Exception e)
         {
-            // Maybe just push exception to instance exceptoin queue???
+            // Push exception packet of correct serialized format (probably json) out std err
             ;
         }
         /// <summary>
