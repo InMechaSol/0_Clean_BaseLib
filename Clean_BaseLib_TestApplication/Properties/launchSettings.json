@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Clean_BaseLib_TestApplication": {
+      "commandName": "Project",
+      "commandLineArgs": "0"
+    }
+  }
+}

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.Serialization;
-using System.Collections.Generic;
-using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 /// <summary>
 /// Collection of abstract classes forming the basis of clean eco-system on .NET Core 3.0 
@@ -83,95 +82,45 @@ namespace Clean_BaseLib
     /// <remarks>
     /// Packets are known throughout the computing eco system and pass through the clean boundaries of dependency via serialization.
     /// </remarks>
-    public abstract class BaseClass_Packet : ISerialValueCollection
+    public abstract class BaseClass_Packet
     {
-        #region Serialization of the Packet Class
-        /// <summary>
-        /// for use in serialization...
-        /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-        public abstract void GetObjectData(SerializationInfo info, StreamingContext context);
-        #endregion
-
-        #region Properties of the Packet Class
-        /// <summary>
-        /// Property exposing the packet header
-        /// </summary>
-        public BaseClass_PacketHeader Header 
+        public Int32 ModuleID { get; protected set; } = 0;
+        public BaseClass_Packet()
         {
-            set { packetHeader = value; }
-            get { return packetHeader; }
         }
-        /// <summary>
-        /// Property exposing the packet header
-        /// </summary>
-        public BaseClass_PacketHeader Payload
+        public BaseClass_Packet(Int32 modID)
         {
-            set { packetHeader = value; }
-            get { return packetHeader; }
+            ModuleID = modID;
         }
-        /// <summary>
-        /// The interface property for exposing the list of serial values
-        /// </summary>
-        public List<BaseClass_SerialValue> SerialValueList { set; get; }
-        #endregion
+        public BaseClass_Packet(byte[] packBytes)
+        {
+            JsonSerializer.Deserialize<BaseClass_Packet>(packBytes);
+        }
 
-        #region Data Members of the Packet Class
-        /// <summary>
-        /// Protected packet header exposed by public property.
-        /// </summary>
-        protected BaseClass_PacketHeader packetHeader;
-        /// <summary>
-        /// Protected packet payload exposed by public property.
-        /// </summary>
-        protected BaseClass_PacketPayload packetPayload;
-        #endregion
+        public byte[] toJSON_array()
+        {
+            return toJSON_bytes();
+        }
+        protected virtual byte[] toJSON_bytes()
+        {
+            return JsonSerializer.SerializeToUtf8Bytes<BaseClass_Packet>(this);
+        }
     }
-    /// <summary>
-    /// BaseClass_PacketHeader is the abstract header class used for routing and identification of the packet payload
-    /// </summary>
-    public abstract class BaseClass_PacketHeader : ISerialValueCollection
+   
+    public class ExceptionPacket:BaseClass_Packet
     {
-        #region Serialization of the Header Class
-        /// <summary>
-        /// for use in serialization...
-        /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-        public abstract void GetObjectData(SerializationInfo info, StreamingContext context);
-        #endregion
-
-        /// <summary>
-        /// The interface property for exposing the list of serial values
-        /// </summary>
-        public List<BaseClass_SerialValue> SerialValueList { set; get; }
-    }
-    /// <summary>
-    /// BaseClass_PacketPayload is the abstract payload class used to transfer serialized values through the clean system
-    /// </summary>
-    public abstract class BaseClass_PacketPayload : ISerialValueCollection
-    {
-        /// <summary>
-        /// for use in serialization...
-        /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-        public abstract void GetObjectData(SerializationInfo info, StreamingContext context);
-
-        /// <summary>
-        /// The interface property for exposing the list of serial values
-        /// </summary>
-        public List<BaseClass_SerialValue> SerialValueList { set; get; }
-    }
-    /// <summary>
-    /// The interface for packets, headers, and payloads
-    /// </summary>
-    public interface ISerialValueCollection: ISerializable
-    {
-        /// <summary>
-        /// The interface property for exposing the list of serial values
-        /// </summary>
-        public List<BaseClass_SerialValue> SerialValueList { set; get; }
+        public ExeSysException PackedException { get; protected set; }
+        protected override byte[] toJSON_bytes()
+        {
+            return JsonSerializer.SerializeToUtf8Bytes<ExceptionPacket>(this);
+        }
+        protected ExceptionPacket(byte[] packBytes)
+        {
+            JsonSerializer.Deserialize<ExceptionPacket>(packBytes);
+        }
+        public ExceptionPacket(ExeSysException pckdExcpt):base(0)
+        {
+            PackedException = pckdExcpt;
+        }
     }
 }
