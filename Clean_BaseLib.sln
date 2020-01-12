@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "0_Clean_BaseLib", "0_Clean_
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean_BaseLib_Tests", "Clean_BaseLib_Tests\Clean_BaseLib_Tests.csproj", "{8403847E-5037-4068-8598-E9DD076C8058}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clean_BaseLib_TestLib", "Clean_BaseLib_TestLib\Clean_BaseLib_TestLib.csproj", "{AFA74AAB-13A0-4ED9-873B-E84443AB71AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean_BaseLib_TestLib", "Clean_BaseLib_TestLib\Clean_BaseLib_TestLib.csproj", "{AFA74AAB-13A0-4ED9-873B-E84443AB71AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clean_BaseLib_TestApplication", "Clean_BaseLib_TestApplication\Clean_BaseLib_TestApplication.csproj", "{EA2C12BB-1433-4407-AF0A-41B5B1E77FC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean_BaseLib_TestApplication", "Clean_BaseLib_TestApplication\Clean_BaseLib_TestApplication.csproj", "{EA2C12BB-1433-4407-AF0A-41B5B1E77FC4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clean_BaseLib_API_TestApp", "Clean_BaseLib_API_TestApp\Clean_BaseLib_API_TestApp.csproj", "{8748EA08-BB42-4EEC-BD4D-3C3E173E09F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{EA2C12BB-1433-4407-AF0A-41B5B1E77FC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA2C12BB-1433-4407-AF0A-41B5B1E77FC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA2C12BB-1433-4407-AF0A-41B5B1E77FC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8748EA08-BB42-4EEC-BD4D-3C3E173E09F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8748EA08-BB42-4EEC-BD4D-3C3E173E09F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8748EA08-BB42-4EEC-BD4D-3C3E173E09F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8748EA08-BB42-4EEC-BD4D-3C3E173E09F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

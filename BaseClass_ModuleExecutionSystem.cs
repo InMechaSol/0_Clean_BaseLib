@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Reflection;
+using System.Threading;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Threading;
+using System.Text.Json;
+using System.IO;
+
 
 
 namespace Clean_BaseLib
@@ -34,31 +39,95 @@ namespace Clean_BaseLib
     {
         #region Configuration Settings of the Module Execution System
         public BaseClass_Sys_ExecutionPolicy ExecutionPolicy { protected set; get; } = new BaseClass_Sys_ExecutionPolicy();
+
+
+        public static ConcurrentDictionary<int, Type> KnownPacketTypes = new ConcurrentDictionary<int, Type>()
+        {
+            [0] = typeof(ExceptionPacket_0),
+            [1] = typeof(StatusPacket_1),
+            [2] = typeof(UnknownPacket_2)
+        };
+        
+        public static List<Assembly> ProcAssemblies = new List<Assembly> { Assembly.GetExecutingAssembly() };
+
+        public static bool DeSerializeKnownPacket(ref byte[] bytesIn, SerializationType sT, ref BaseClass_Packet outPack)
+        {
+
+            if (KnownPacketTypes.ContainsKey(outPack.PacketKey))
+                switch (sT)
+                {
+                    case SerializationType.text_JSON:
+                        {
+                            outPack = ((BaseClass_Packet)(JsonSerializer.Deserialize(bytesIn, KnownPacketTypes.GetValueOrDefault(outPack.PacketKey))));
+                            if (outPack != null)
+                                if (outPack.GetType() == KnownPacketTypes.GetValueOrDefault(outPack.PacketKey))
+                                    return true;
+                        }
+                        return false;
+                    default: throw new NotImplementedException("De-serialization Types other than JSON are not yet Supported!");
+                }
+            else
+                return false;
+
+        }
+        public static void UpdateKnownSysPacket()
+        {
+            foreach (Assembly procAssm in ProcAssemblies)
+            {
+                foreach(Type packetType in procAssm.GetTypes())
+                    if (typeof(BaseClass_Packet).IsSubclassOf(packetType))
+                    {
+                        int idex = packetType.Name.LastIndexOf('_');
+                        if (idex < 0)
+                            throw new Exception("Packet Type names must end with matching packet key string.");
+
+                        string pkeystring = packetType.Name.Substring(idex + 1, packetType.Name.Length - idex);
+
+                        int pkey;
+                        if(!Int32.TryParse(pkeystring, out pkey))
+                            throw new Exception("Packet Type names must end with matching packet key string.");
+
+
+
+                        bool didAdd = false;
+                        if (!KnownPacketTypes.ContainsKey(pkey)) 
+                            didAdd = KnownPacketTypes.TryAdd(pkey,packetType);
+                        else
+                        {
+                            Type t;
+                            if (KnownPacketTypes.TryGetValue(pkey, out t))
+                            {
+                                if (t != packetType)
+                                {
+                                    throw new Exception("Packet Key reuse error: packet types must have unique keys.");
+                                }
+                            }
+
+                        }
+                    }
+            }
+        }
         #endregion
 
         #region Constructors of the Module Execution System
         static BaseClass_ModuleExecutionSystem()
         {
-            
+           
         }
         /// <summary>
         /// Constructor from nothing
         /// </summary>
         public BaseClass_ModuleExecutionSystem()
         {
-            exesys_module = new BaseClass_ExeSys_Module(this);
+            SysModule = new ExeSys_Module(this);
         }
         #endregion
 
         #region Properties of the Module Execution System
-        /// <summary>
-        /// Property exposing thread list
-        /// </summary>
-        public virtual List<Thread> Threads { set; get; }
-        /// <summary>
-        /// Property exposing module list
-        /// </summary>
-        public virtual List<BaseClass_Module> CoreModules { set; get; }
+        public abstract ExeSys_Module SysModule { get; protected set; }
+        public abstract Interface_Module UsrModule { get; protected set; }
+        public abstract Sandbox_Module SbxModule { get; protected set; }
+
         public void PushModuleException(Exception exception)
         {
             applicationExceptionQueue.Enqueue(exception);
@@ -78,9 +147,11 @@ namespace Clean_BaseLib
         TimeSpan                            executeDuration;
         bool                                stopExeSys =                    false;
         int                                 threadindex, moduleindex;
-        BaseClass_ExeSys_Module             exesys_module;
         List<int>                           module_blocked_cycles_list =    new List<int>();
         bool                                initialized =                   false;
+        Stream                              stdOutputStream =               Console.OpenStandardOutput();
+        Stream                              stdInputStream =                Console.OpenStandardInput();
+        Stream                              stdErrorStream =                Console.OpenStandardError();
         #endregion
 
         #region Main Entry Point of the Module Execution System (call this from the application)
@@ -277,6 +348,7 @@ namespace Clean_BaseLib
             // Full Initialization
 
             // Partial Initialization
+            UpdateKnownSysPacket();
 
             initialized = true;
         }
@@ -313,7 +385,8 @@ namespace Clean_BaseLib
         /// </remarks>
         public static void ApplicationExceptionHandler(Exception e)
         {
-            Console.Error.Write((new ExceptionPacket(NewApplicationException(e))).toJSON_array()); 
+            ExceptionPacket_0 ePack = new ExceptionPacket_0 { PackedException = NewApplicationException(e) };
+            ePack.ToByteStream(BaseClass_Sys_ExecutionPolicy.default_serialization,Console.OpenStandardOutput());
         }
         /// <summary>
         /// Fundamental Execute Case Function, Cyclic and Non-Blocking, Enforces Execution Policy
@@ -521,7 +594,11 @@ namespace Clean_BaseLib
         void ConsoleDumpExceptions()
         {
             foreach(ExeSysException ep in exception_list)
-                Console.Error.Write((new ExceptionPacket(ep)).toJSON_array());
+            {
+                ExceptionPacket_0 ePack = new ExceptionPacket_0 { PackedException = ep };
+                ePack.ToByteStream(ExecutionPolicy.SystemSerializationType, stdErrorStream);
+
+            }
         }
         public void ResetExePolicy_Default()
         {
@@ -531,9 +608,24 @@ namespace Clean_BaseLib
     }
 
 
-    public class BaseClass_ExeSys_Module : BaseClass_Module
+    public class ExeSys_Module : BaseClass_Module
     {
-        public BaseClass_ExeSys_Module(BaseClass_ModuleExecutionSystem exSystem) : base(exSystem)
+        public ExeSys_Module(BaseClass_ModuleExecutionSystem exSystem) : base(exSystem)
+        {
+
+        }
+    }
+    public class Interface_Module : BaseClass_Module
+    {
+        public BaseClass_PacketPort InterfacePort { get; protected set; }
+        public Interface_Module(BaseClass_ModuleExecutionSystem exSystem) : base(exSystem)
+        {
+
+        }
+    }
+    public class Sandbox_Module : BaseClass_Module
+    {
+        public Sandbox_Module(BaseClass_ModuleExecutionSystem exSystem) : base(exSystem)
         {
 
         }

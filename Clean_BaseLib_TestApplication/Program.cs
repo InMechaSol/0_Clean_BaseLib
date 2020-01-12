@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Clean_BaseLib_TestLib;
 
 namespace Clean_BaseLib_TestApplication
@@ -12,6 +13,8 @@ namespace Clean_BaseLib_TestApplication
             catch { exampleCase = 0; }
             finally
             {
+                Console.InputEncoding = Encoding.UTF8;
+                Console.OutputEncoding = Encoding.UTF8;
                 Console.Title = ExeSysTestProcess.titleString + exampleCase.ToString("D4");
                 Console.WriteLine(Console.Title);
                 switch (exampleCase)

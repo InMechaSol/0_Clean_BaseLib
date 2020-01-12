@@ -17,12 +17,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Clean_BaseLib_API_TestApp\**" />
     <Compile Remove="Clean_BaseLib_TestApplication\**" />
     <Compile Remove="Clean_BaseLib_TestLib\**" />
     <Compile Remove="Clean_BaseLib_Tests\**" />
+    <EmbeddedResource Remove="Clean_BaseLib_API_TestApp\**" />
     <EmbeddedResource Remove="Clean_BaseLib_TestApplication\**" />
     <EmbeddedResource Remove="Clean_BaseLib_TestLib\**" />
     <EmbeddedResource Remove="Clean_BaseLib_Tests\**" />
+    <None Remove="Clean_BaseLib_API_TestApp\**" />
     <None Remove="Clean_BaseLib_TestApplication\**" />
     <None Remove="Clean_BaseLib_TestLib\**" />
     <None Remove="Clean_BaseLib_Tests\**" />

@@ -1,18 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json;
 
 namespace Clean_BaseLib
 {
-    public class BaseClass_DataExecutionPolicy
-    {
-    }
-
-    public class BaseClass_ExecutionPolicy
-    {
-
-    }
-
+    
     public class BaseClass_Sys_ExecutionPolicy
     {
         /// <summary>
@@ -39,7 +32,14 @@ namespace Clean_BaseLib
 
         public bool LogExceptions { get; protected set; } = false;
         public bool AdvertiseExceptions { get; protected set; } = false;
-        
+        public static readonly SerializationType default_serialization = SerializationType.text_JSON;
+        public SerializationType SystemSerializationType { get; protected set; } = default_serialization;
+        public static readonly int default_msSleep_readLoops = 10;
+        public int MSSleep_ReadLoops { get; protected set; } = default_msSleep_readLoops;
+        public static readonly int default_msSleep_APIProc_PostInputDelay = 10;
+        public int msSleep_API_PostInputDelay { get; protected set; } = default_msSleep_APIProc_PostInputDelay;
+        public static readonly int default_msSleep_APIProc_ExitDelay = 100;
+        public int msSleep_API_ExitDelay { get; protected set; } = default_msSleep_APIProc_ExitDelay;
         static BaseClass_Sys_ExecutionPolicy()
         {
             
